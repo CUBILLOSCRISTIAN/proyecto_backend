@@ -7,7 +7,6 @@ const { respondWithError } = require("../utils/functions");
 async function GetBooks(req, res) {
   try {
     const resultadosBusqueda = await readBookWithFilters(req.query);
-
     res.status(200).json({ ...resultadosBusqueda });
   } catch (e) {
     respondWithError(res, e);
@@ -19,7 +18,7 @@ async function PostBook(req, res) {
     await createBook(req.body);
 
     res.status(201).json(
-      { ...req.body } // Devuelve el libro creado,
+      req.body // Devuelve el libro creado,
     );
   } catch (e) {
     respondWithError(res, e);
