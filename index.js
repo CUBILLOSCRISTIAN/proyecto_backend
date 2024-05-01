@@ -11,8 +11,8 @@ app.get("/", (req, res) => {
   res.status(200).json({});
 });
 
-const routesBooks = require("./routes/books");
-app.use("/books", routesBooks);
+const routesBooks = require("./book/book.route");
+app.use("/book", routesBooks);
 
 //MORE ROOUTES
 
