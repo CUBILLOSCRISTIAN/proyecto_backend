@@ -32,6 +32,6 @@ Desarrollé este backend para abordar la necesidad de crear un sistema eficiente
 
 ## Repositorio y Autor 📁✍️
 
-Este proyecto se encuentra alojado en [enlace al repositorio de GitHub](https://github.com/CUBILLOSCRISTIAN/proyecto_backend) y fue desarrollado por mí, `<Cristian Cubillos/>`.
+Este proyecto se encuentra alojado en [GitHub](https://github.com/CUBILLOSCRISTIAN/proyecto_backend) y fue desarrollado por mí, `<Cristian Cubillos/>`.
 
 ¡Gracias por revisar mi proyecto! 🙌
