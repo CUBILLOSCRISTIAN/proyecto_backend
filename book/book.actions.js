@@ -5,4 +5,10 @@ async function createBookMongo(data) {
   return newBook;
 }
 
-module.exports = { createBookMongo };
+async function getBooksMongo(filters) {
+  const numberOfBooks = await Book.countDocuments(filters);
+  const books = await Book.find(filters);
+  return { numberOfBooks, books };
+}
+
+module.exports = { createBookMongo, getBooksMongo };
