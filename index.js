@@ -12,7 +12,7 @@ app.get("/", (req, res) => {
 });
 
 const routesBooks = require("./book/book.route");
-app.use("/book", routesBooks);
+app.use("/books", routesBooks);
 
 //MORE ROOUTES
 
