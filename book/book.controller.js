@@ -1,5 +1,5 @@
 const { throwCustomError } = require("../utils/functions");
-const { createBookMongo } = require("./book.actions");
+const { createBookMongo, getBooksMongo } = require("./book.actions");
 
 async function createBook(data) {
   //Si necesitamos hacer validaciones, las hacemos aquí, destructurando el objeto data
@@ -7,4 +7,9 @@ async function createBook(data) {
   return CreatedBook;
 }
 
-module.exports = { createBook };
+async function readBookWithFilters(filters) {
+  const resultadosBusqueda = await getBooksMongo(filters);
+  return resultadosBusqueda;
+}
+
+module.exports = { createBook, readBookWithFilters };
