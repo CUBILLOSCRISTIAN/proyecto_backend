@@ -14,7 +14,7 @@ async function PostBook(req, res) {
   try {
     await createBook(req.body);
 
-    res.status(200).json({
+    res.status(201).json({
       mensaje: "Creado. 🎉",
     });
   } catch (e) {
