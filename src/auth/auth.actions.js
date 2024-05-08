@@ -21,7 +21,7 @@ async function registerUser(data) {
 }
 
 async function loginUser(data) {
-  const { name, email, password } = data;
+  const { email, password } = data;
 
   const userFound = await User.findOne({ email: email });
 
@@ -37,7 +37,7 @@ async function loginUser(data) {
   if (!matchPassword) return { message: "Invalid password" };
 
   const token = jwt.sign({ id: userFound._id }, config.SECRET, {
-    expiresIn: 86400,
+    expiresIn: 86400, //24 horas
   });
   return { token };
 }
