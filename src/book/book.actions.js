@@ -11,4 +11,9 @@ async function getBooksMongo(filters) {
   return { numberOfBooks, books };
 }
 
-module.exports = { createBookMongo, getBooksMongo };
+async function getBookByIdMongo(id) {
+  const book = await Book.findById(id);
+  return book;
+}
+
+module.exports = { createBookMongo, getBooksMongo, getBookByIdMongo };
