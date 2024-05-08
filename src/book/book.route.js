@@ -4,6 +4,8 @@ const { createBook, readBookWithFilters } = require("./book.controller");
 
 const { respondWithError } = require("../../utils/functions");
 
+const { verifyToken } = require("../auth/auth.actions");
+
 async function GetBooks(req, res) {
   try {
     const resultadosBusqueda = await readBookWithFilters(req.query);
@@ -26,6 +28,6 @@ async function PostBook(req, res) {
 }
 
 router.get("/", GetBooks);
-router.post("/", PostBook);
+router.post("/", verifyToken, PostBook); //Crear un libro
 
 module.exports = router;
