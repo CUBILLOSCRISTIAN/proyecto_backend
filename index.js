@@ -14,6 +14,9 @@ app.get("/", (req, res) => {
 const routesBooks = require("./src/book/book.route");
 app.use("/books", routesBooks);
 
+const routesAuth = require("./src/auth/auth.route");
+app.use("/auth", routesAuth);
+
 //MORE ROOUTES
 
 mongoose.connect(
