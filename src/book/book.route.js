@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { createBook, readBookWithFilters } = require("./book.controller");
+const {
+  createBook,
+  readBookWithFilters,
+  readBookById,
+} = require("./book.controller");
 
 const { respondWithError } = require("../../utils/functions");
 
@@ -27,7 +31,17 @@ async function PostBook(req, res) {
   }
 }
 
-router.get("/", GetBooks);
+async function GetBook(req, res) {
+  try {
+    const book = await readBookById(req.params.id);
+    res.status(200).json(book);
+  } catch (e) {
+    respondWithError(res, e);
+  }
+}
+
+router.get("/", GetBooks); //Obtener todos los libros
+router.get("/:id", GetBook); //Obtener un libro
 router.post("/", verifyToken, PostBook); //Crear un libro
 
 module.exports = router;
