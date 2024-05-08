@@ -2,12 +2,14 @@ const express = require("express");
 const router = express.Router();
 const { register, login } = require("./auth.controller");
 
+const { respondWithError } = require("../../utils/functions");
+
 async function registerUser(req, res) {
   try {
     const newUser = await register(req.body);
     res.status(201).json({ ...newUser });
   } catch (e) {
-    res.status(400).json({ error: e.message });
+    respondWithError(res, e);
   }
 }
 
@@ -16,8 +18,7 @@ async function loginUser(req, res) {
     const user = await login(req.body);
     res.status(200).json(user);
   } catch (e) {
-    console.log(e);
-    res.status(400).json({ error: e.message });
+    respondWithError(res, e);
   }
 }
 
