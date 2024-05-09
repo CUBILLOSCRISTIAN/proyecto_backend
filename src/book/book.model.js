@@ -7,7 +7,7 @@ const schemaLibro = new mongoose.Schema(
     genero: { type: String, required: true },
     fecha_publicacion: { type: Date, required: true },
     casa_editorial: { type: String, required: true },
-    usuario_id: { type: mongoose.Schema.Types.ObjectId},
+    dueño: { type: mongoose.Schema.Types.ObjectId},
     disponible: { type: Boolean, default: true },
     eliminado: { type: Boolean, default: false },
   },
