@@ -16,7 +16,6 @@ const schemaPedido = new mongoose.Schema(
       { type: mongoose.Schema.Types.ObjectId, ref: "Libro", required: true },
     ],
     direccion_envio: { type: String, required: true },
-    metodo_pago: { type: String, required: true },
     total: { type: Number, required: true },
     estado: { type: String, default: "en progreso" },
   },
