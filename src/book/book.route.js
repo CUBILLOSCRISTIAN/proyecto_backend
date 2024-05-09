@@ -21,6 +21,7 @@ async function GetBooks(req, res) {
 
 async function PostBook(req, res) {
   try {
+    req.body.dueño = req.user._id;
     await createBook(req.body);
 
     res.status(201).json(
