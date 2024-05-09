@@ -21,11 +21,12 @@ async function GetBooks(req, res) {
 
 async function PostBook(req, res) {
   try {
-    req.body.dueño = req.user._id;
-    await createBook(req.body);
+    console.log(req);
+    req.body.dueño = req.userId;
+    const createdBook = await createBook(req.body);
 
     res.status(201).json(
-      req.body // Devuelve el libro creado,
+      createdBook // Devuelve el libro creado,
     );
   } catch (e) {
     respondWithError(res, e);
