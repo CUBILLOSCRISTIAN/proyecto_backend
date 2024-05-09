@@ -1,8 +1,8 @@
-const { GetUserById} = require("./user.actions");
+const { GetUserByIdMongo} = require("./user.actions");
 
-async function GetUser(id) {
-  const user = await GetUserById(id);
+async function GetUserById(id) {
+  const user = await GetUserByIdMongo(id);
   return user;
 }
 
-module.exports = { GetUser };
+module.exports = { GetUserById };
