@@ -1,7 +1,8 @@
 const User = require("../user/user.model");
 const jwt = require("jsonwebtoken");
 const config = require("../../config");
-const { respondWithError } = require("../../utils/functions");
+const { respondWithError, throwCustomError } = require("../../utils/functions");
+const { create } = require("../book/book.model");
 
 async function registerUser(data) {
   const { name, email, password } = data;
@@ -27,7 +28,7 @@ async function loginUser(data) {
   const userFound = await User.findOne({ email: email });
 
   if (!userFound) {
-    throw new Error("User not found");
+    return throwCustomError(404, "User not found");
   }
 
   const matchPassword = await User.comparePassword(
