@@ -25,6 +25,6 @@ const schemaPedido = new mongoose.Schema(
   }
 );
 
-const Pedido = mongoose.model("Pedido", schemaPedido);
+const Order = mongoose.model("pedidos", schemaPedido);
 
-module.exports = { Pedido };
+module.exports = Order ;
