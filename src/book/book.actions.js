@@ -6,7 +6,7 @@ async function createBookMongo(data) {
 }
 
 async function getBooksMongo(filters) {
-  filters = { disponible: true };
+  filters = { ...filters, disponible: true };
   const numberOfBooks = await Book.countDocuments(filters);
   const books = await Book.find(filters);
   return { numberOfBooks, books };
