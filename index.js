@@ -20,6 +20,9 @@ app.use("/users", routesAuth);
 const routesUser = require("./src/user/user.route");
 app.use("/users", routesUser);
 
+const routesOrder = require("./src/order/order.route");
+app.use("/order", routesOrder);
+
 //MORE ROOUTES
 
 mongoose.connect(
