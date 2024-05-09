@@ -21,7 +21,6 @@ async function GetBooks(req, res) {
 
 async function PostBook(req, res) {
   try {
-    console.log(req);
     req.body.dueño = req.userId;
     const createdBook = await createBook(req.body);
 
