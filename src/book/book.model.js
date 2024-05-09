@@ -8,6 +8,7 @@ const schemaLibro = new mongoose.Schema(
     fecha_publicacion: { type: Date, required: true },
     casa_editorial: { type: String, required: true },
     dueño: { type: mongoose.Schema.Types.ObjectId},
+    precio: { type: Number, required: true },
     disponible: { type: Boolean, default: true },
     eliminado: { type: Boolean, default: false },
   },
