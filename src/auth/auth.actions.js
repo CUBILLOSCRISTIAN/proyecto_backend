@@ -40,6 +40,7 @@ async function loginUser(data) {
   const token = jwt.sign({ id: userFound._id }, config.SECRET, {
     expiresIn: 86400, //24 horas
   });
+
   return { token };
 }
 
@@ -49,7 +50,7 @@ async function verifyToken(req, res, next) {
 
     if (!token) return res.status(403).json({ message: "No token provided" });
 
-    const decoded = await jwt.verify(token, config.SECRET)
+    const decoded = await jwt.verify(token, config.SECRET);
     req.userId = decoded.id;
 
     const user = await User.findById(req.userId, { password: 0 });
@@ -60,4 +61,4 @@ async function verifyToken(req, res, next) {
   }
 }
 
-module.exports = { registerUser, loginUser, verifyToken};
+module.exports = { registerUser, loginUser, verifyToken };
