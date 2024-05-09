@@ -7,7 +7,6 @@ const { respondWithError } = require("../../utils/functions");
 async function registerUser(req, res) {
   try {
     const newUser = await register(req.body);
-    console.log(newUser);
     res.status(201).json({ ...newUser });
   } catch (e) {
     respondWithError(res, e);
