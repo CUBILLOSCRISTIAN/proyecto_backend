@@ -1,4 +1,8 @@
-const { createBookMongo, getBooksMongo, getBookByIdMongo} = require("./book.actions");
+const {
+  createBookMongo,
+  getBooksMongo,
+  getBookByIdMongo,
+} = require("./book.actions");
 
 async function createBook(data) {
   const CreatedBook = await createBookMongo(data);
@@ -6,7 +10,6 @@ async function createBook(data) {
 }
 
 async function readBookWithFilters(filters) {
-  
   const resultadosBusqueda = await getBooksMongo(filters);
   return resultadosBusqueda;
 }
