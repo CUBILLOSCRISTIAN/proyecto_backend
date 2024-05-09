@@ -6,6 +6,7 @@ async function createBook(data) {
 }
 
 async function readBookWithFilters(filters) {
+  
   const resultadosBusqueda = await getBooksMongo(filters);
   return resultadosBusqueda;
 }
