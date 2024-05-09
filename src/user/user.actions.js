@@ -1,8 +1,8 @@
 const User = require("./user.model");
 
-async function GetUserById(id) {
+async function GetUserByIdMongo(id) {
   const user = await User.findById(id);
   return user;
 }
 
-module.exports = { GetUserById };
+module.exports = { GetUserByIdMongo };
