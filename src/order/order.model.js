@@ -2,13 +2,23 @@ const mongoose = require("mongoose");
 
 const schemaPedido = new mongoose.Schema(
   {
-    usuario_id: { type: mongoose.Schema.Types.ObjectId, required: true },
+    comprador: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    vendedor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     libros_ids: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Libro", required: true },
     ],
-    estado: { type: String, required: true },
-    fecha_creacion: { type: Date, default: Date.now },
-    fecha_modificacion: { type: Date, default: Date.now },
+    direccion_envio: { type: String, required: true },
+    metodo_pago: { type: String, required: true },
+    total: { type: Number, required: true },
+    estado: { type: String, default: "en progreso" },
   },
   {
     versionKey: false,
