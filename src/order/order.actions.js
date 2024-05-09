@@ -1,5 +1,5 @@
-const { default: mongoose } = require("mongoose");
 const Order = require("./order.model");
+const Book = require("../book/book.model");
 
 async function createOrderMongo(data) {
   const newOrder = await Order.create(data);
@@ -8,7 +8,7 @@ async function createOrderMongo(data) {
 
 async function verifyOnlySalesman(books_ids) {
   const books = await Book.find({ _id: { $in: books_ids } });
-  const firstSalesman = books[0].vendedor;
+  const firstSalesman = books[0].dueño;
   return books.every((book) => book.vendedor === firstSalesman);
 }
 
@@ -17,4 +17,14 @@ async function getBooksTotalPrice(books_ids) {
   return books.reduce((acc, book) => acc + book.precio, 0);
 }
 
-module.exports = { createOrderMongo, verifyOnlySalesman, getBooksTotalPrice };
+async function getSalesman(books_ids) {
+  const books = await Book.find({ _id: { $in: books_ids } });
+  return books[0].dueño;
+}
+
+module.exports = {
+  createOrderMongo,
+  verifyOnlySalesman,
+  getBooksTotalPrice,
+  getSalesman,
+};
