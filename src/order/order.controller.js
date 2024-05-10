@@ -1,9 +1,11 @@
-const { verify } = require("jsonwebtoken");
+const { respondWithError, throwCustomError } = require("../../utils/functions");
+
 const {
   createOrderMongo,
   verifyOnlySalesman,
   getBooksTotalPrice,
   getSalesman,
+  getOrderMongo,
 } = require("./order.actions");
 
 async function createOrder(data) {
@@ -20,6 +22,22 @@ async function createOrder(data) {
   return createdOrder;
 }
 
+async function getOrder(idOrder, userId) {
+  try {
+    const order = await getOrderMongo(idOrder);
+
+    if (order.comprador != userId && order.vendedor != userId) {
+      return throwCustomError(
+        403,
+        "No tienes permisos para realizar esta acción."
+      );
+    }
+    return order;
+  } catch (error) {
+    throwCustomError(404, "El pedido no existe.");
+  }
+}
 module.exports = {
   createOrder,
+  getOrder,
 };
