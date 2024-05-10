@@ -5,12 +5,10 @@ const schemaPedido = new mongoose.Schema(
     comprador: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
     },
     vendedor: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
     },
     libros_ids: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Libro", required: true },
@@ -27,4 +25,4 @@ const schemaPedido = new mongoose.Schema(
 
 const Order = mongoose.model("pedidos", schemaPedido);
 
-module.exports = Order ;
+module.exports = Order;
