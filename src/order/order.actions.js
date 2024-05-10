@@ -9,7 +9,7 @@ async function createOrderMongo(data) {
 async function verifyOnlySalesman(books_ids) {
   const books = await Book.find({ _id: { $in: books_ids } });
   const firstSalesman = books[0].dueño;
-  return books.every((book) => book.vendedor === firstSalesman);
+  return books.every((book) => book.dueño.equals(firstSalesman));
 }
 
 async function getBooksTotalPrice(books_ids) {
@@ -22,9 +22,15 @@ async function getSalesman(books_ids) {
   return books[0].dueño;
 }
 
+async function getOrderMongo(idOrder) {
+  const order = await Order.findById(idOrder);
+  return order;
+}
+
 module.exports = {
   createOrderMongo,
   verifyOnlySalesman,
   getBooksTotalPrice,
   getSalesman,
+  getOrderMongo,
 };
