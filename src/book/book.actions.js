@@ -17,4 +17,15 @@ async function getBookByIdMongo(id) {
   return book;
 }
 
-module.exports = { createBookMongo, getBooksMongo, getBookByIdMongo };
+async function changeStatusBookMongo(book) {
+  book.disponible = false;
+  await book.save();
+  return book;
+}
+
+module.exports = {
+  createBookMongo,
+  getBooksMongo,
+  getBookByIdMongo,
+  changeStatusBookMongo,
+};
