@@ -17,9 +17,9 @@ Desarrollé este backend para abordar la necesidad de crear un sistema eficiente
 
 ## Endpoints Principales 🎯
 
-- `/usuarios`
-- `/libros`
-- `/pedidos`
+- `/users`
+- `/books`
+- `/orders`
 
 ## Consideraciones Importantes 🚨
 
@@ -27,7 +27,7 @@ Desarrollé este backend para abordar la necesidad de crear un sistema eficiente
 - Las operaciones de READ excluyen las entradas inhabilitadas, a menos que se soliciten explícitamente.
 - Se requiere autenticación para identificar a los usuarios en operaciones como la creación de pedidos.
 - Los pedidos pueden ser cancelados por el usuario que los realizó o completados/cancelados por el usuario que los recibió.
-- Al completar un pedido, los libros asociados se eliminan automáticamente.
+- Al crear un pedido, los libros asociados se eliminan automáticamente, si esté es cancelado, los libros retornan a disponibles nuevamente.
 - Un pedido puede contener múltiples libros, todos del mismo usuario.
 
 ## Repositorio y Autor 📁✍️
