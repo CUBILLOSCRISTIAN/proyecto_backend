@@ -1,7 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const { createOrder, getOrder, getOrders } = require("./order.controller");
+const {
+  createOrder,
+  getOrder,
+  getOrders,
+  updateOrder,
+} = require("./order.controller");
 
 const { respondWithError, throwCustomError } = require("../../utils/functions");
 
@@ -35,9 +40,19 @@ async function GetOrders(req, res) {
   }
 }
 
+async function UpdateOrder(req, res) {
+  try {
+    const order = await updateOrder(req.params.id, req.userId, req.body);
+    res.status(200).json(order);
+  } catch (e) {
+    throwCustomError(res.status, e);
+  }
+}
+
 //Obtener una orden
 router.post("/", verifyToken, PostOrder); //Crear una orden
 router.get("/:id", verifyToken, GetOrder); //Obtener una orden
 router.get("/", verifyToken, GetOrders); //Obtener todas las ordenes
+router.patch("/:id", verifyToken, UpdateOrder); //Actualizar una orden
 
 module.exports = router;
