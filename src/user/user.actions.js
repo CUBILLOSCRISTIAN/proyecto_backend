@@ -1,4 +1,3 @@
-const { use } = require("../order/order.route");
 const User = require("./user.model");
 
 async function GetUserByIdMongo(id) {

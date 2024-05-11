@@ -48,7 +48,16 @@ async function UpdateBook(req, res) {
     );
     res.status(200).json(book);
   } catch (e) {
-    throwCustomError(res.status, e);
+    respondWithError(res, e);
+  }
+}
+
+async function DeleteBook(req, res) {
+  try {
+    const book = await bookController.deleteBook(req.params.id, req.userId);
+    res.status(200).json({ msg: "Libro eliminado", book });
+  } catch (e) {
+    respondWithError(res, e);
   }
 }
 
@@ -56,5 +65,6 @@ router.get("/", GetBooks); //Obtener todos los libros
 router.get("/:id", GetBook); //Obtener un libro
 router.post("/", verifyToken, PostBook); //Crear un libro
 router.patch("/update/:id", verifyToken, UpdateBook); //Actualizar un libro
+router.patch("/delete/:id", verifyToken, DeleteBook); //Eliminar un libro
 
 module.exports = router;

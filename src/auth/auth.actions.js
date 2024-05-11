@@ -38,7 +38,7 @@ async function loginUser(data) {
 
   const matchPassword = await comparePassword(password, userFound.password);
 
-  if (!matchPassword) return { message: "Invalid password" };
+  if (!matchPassword) return throwCustomError(401, "Invalid password");
 
   const token = jwt.sign({ id: userFound._id }, config.SECRET, {
     expiresIn: 86400, //24 horas
@@ -51,16 +51,16 @@ async function verifyToken(req, res, next) {
   try {
     const token = req.headers["x-access-token"];
 
-    if (!token) return res.status(403).json({ message: "No token provided" });
+    if (!token) return throwCustomError(403, "No token provided");
 
     const decoded = await jwt.verify(token, config.SECRET);
     req.userId = decoded.id;
 
     const user = await User.findById(req.userId, { password: 0 });
-    if (!user) return res.status(404).json({ message: "No user found" });
+    if (!user) return throwCustomError(404, "Usuario no encontrado");
     next();
   } catch (error) {
-    respondWithError(res, error);
+    throwCustomError(401, "Unauthorized");
   }
 }
 

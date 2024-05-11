@@ -1,16 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const { respondWithError } = require("../../utils/functions");
+const { respondWithError, throwCustomError } = require("../../utils/functions");
 const userController = require("./user.controller");
 const { verifyToken } = require("../auth/auth.actions");
 
 async function GetUser(req, res) {
   try {
     if (req.userId != req.params.id) {
-      return respondWithError(res, {
-        status: 403,
-        message: "No tienes permisos para realizar esta acción.",
-      });
+      return throwCustomError(
+        403,
+        "No tienes permisos para realizar esta acción."
+      );
     }
 
     const user = await userController.GetUserById(req.params.id);
@@ -23,17 +23,17 @@ async function GetUser(req, res) {
 async function UpdateUser(req, res) {
   try {
     if (req.userId != req.params.id) {
-      return respondWithError(res, {
-        status: 403,
-        message: "No tienes permisos para realizar esta acción.",
-      });
+      return throwCustomError(
+        403,
+        "No tienes permisos para realizar esta acción."
+      );
     }
 
     const user = await userController.updateUser(req.params.id, req.body);
 
     res
       .status(200)
-      .json({ message: "Usuario actualizado correctamente.", user: user });
+      .json({ msg: "Usuario actualizado correctamente.", user: user });
   } catch (e) {
     respondWithError(res, e);
   }
@@ -42,10 +42,10 @@ async function UpdateUser(req, res) {
 async function DeleteUser(req, res) {
   try {
     if (req.userId != req.params.id) {
-      return respondWithError(res, {
-        status: 403,
-        message: "No tienes permisos para realizar esta acción.",
-      });
+      return throwCustomError(
+        403,
+        "No tienes permisos para realizar esta acción."
+      );
     }
 
     userController.deleteUser(req.params.id);
