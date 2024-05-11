@@ -16,7 +16,9 @@ const {
 async function createOrder(data) {
   const { libros_ids } = data;
 
-  if (!verifyOnlySalesman(libros_ids))
+  const verifySalesman = await verifyOnlySalesman(libros_ids);
+
+  if (!verifySalesman)
     return throwCustomError(
       400,
       "Solo puedes comprar libros de un mismo vendedor."
@@ -36,19 +38,20 @@ async function createOrder(data) {
 }
 
 async function getOrder(idOrder, userId) {
-  try {
-    const order = await getOrderMongo(idOrder);
+  const order = await getOrderMongo(idOrder);
 
-    if (verifyUser(order, userId)) {
-      return throwCustomError(
-        403,
-        "No tienes permisos para realizar esta acción, solo el comprador o vendedor pueden ver el pedido"
-      );
-    }
-    return order;
-  } catch (error) {
-    throwCustomError(404, "El pedido no existe.");
+  if (!order) {
+    return throwCustomError(404, "El pedido no existe. jeje");
   }
+
+  const verify = await verifyUser(order, userId);
+  if (!verify) {
+    return throwCustomError(
+      403,
+      "No tienes permisos para realizar esta acción, solo el comprador o vendedor pueden ver el pedido"
+    );
+  }
+  return order;
 }
 
 async function getOrders(userId, filters) {
@@ -60,7 +63,13 @@ async function updateOrder(idOrder, userId, data) {
   const { estado } = data;
   const order = await getOrderMongo(idOrder);
 
-  if (verifyUser(order, userId)) {
+  if (!order) {
+    return throwCustomError(404, "El pedido no existe.");
+  }
+
+  const verify = await verifyUser(order, userId);
+
+  if (!verify) {
     return throwCustomError(
       403,
       "No tienes permisos para realizar esta acción, solo el comprador o vendedor pueden ver el pedido"
