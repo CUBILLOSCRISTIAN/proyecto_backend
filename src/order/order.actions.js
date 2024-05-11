@@ -1,5 +1,6 @@
 const Order = require("./order.model");
 const Book = require("../book/book.model");
+const { changeStatusBookMongo } = require("../book/book.actions");
 
 async function createOrderMongo(data) {
   const newOrder = await Order.create(data);
@@ -24,7 +25,6 @@ async function getSalesman(books_ids) {
 
 async function getOrderMongo(idOrder) {
   const order = await Order.findById(idOrder);
-
   return order;
 }
 
@@ -87,6 +87,29 @@ async function verifyUser(order, userId) {
   return !order.comprador.equals(userId) && !order.vendedor.equals(userId);
 }
 
+async function updateOrderCompradorMongo(order, estado) {
+  if (estado !== "cancelar") {
+    return throwCustomError(400, "El estado proporcionado no es válido.");
+  }
+  order.estado = estado;
+  const books = await Book.find({ _id: { $in: order.libros_ids } });
+  books.every((book) => changeStatusBookMongo(book));
+  await order.save();
+  return order;
+}
+
+async function updateOrderVendedorMongo(order, estado) {
+  if (estado !== "cancelar" && estado !== "completar") {
+    return throwCustomError(400, "El estado proporcionado no es válido.");
+  }
+  order.estado = estado;
+  const books = await Book.find({ _id: { $in: order.libros_ids } });
+  books.every((book) => changeStatusBookMongo(book));
+  await order.save();
+  return order;
+}
+
+
 module.exports = {
   createOrderMongo,
   verifyOnlySalesman,
@@ -96,4 +119,6 @@ module.exports = {
   putOrderInUser,
   getOrdersMongo,
   verifyUser,
+  updateOrderCompradorMongo,
+  updateOrderVendedorMongo,
 };
