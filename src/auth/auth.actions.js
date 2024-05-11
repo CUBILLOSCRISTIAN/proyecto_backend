@@ -23,6 +23,10 @@ async function encryptPassword(password) {
   return await bcrypt.hash(password, salt);
 }
 
+async function comparePassword(password, receivedPassword) {
+  return await bcrypt.compare(password, receivedPassword);
+}
+
 async function loginUser(data) {
   const { email, password } = data;
 
@@ -32,10 +36,7 @@ async function loginUser(data) {
     return throwCustomError(404, "User not found");
   }
 
-  const matchPassword = await User.comparePassword(
-    password,
-    userFound.password
-  );
+  const matchPassword = await comparePassword(password, userFound.password);
 
   if (!matchPassword) return { message: "Invalid password" };
 
