@@ -8,6 +8,7 @@ const {
   getOrderMongo,
   getOrdersMongo,
   putOrderInUser,
+  verifyUser,
 } = require("./order.actions");
 
 async function createOrder(data) {
