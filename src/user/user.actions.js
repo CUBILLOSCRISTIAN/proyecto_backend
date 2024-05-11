@@ -5,4 +5,9 @@ async function GetUserByIdMongo(id) {
   return user;
 }
 
-module.exports = { GetUserByIdMongo };
+async function userUpdateMongo(id, data) {
+  const userUpdated = await User.findByIdAndUpdate(id, data);
+  return userUpdated;
+}
+
+module.exports = { GetUserByIdMongo, userUpdateMongo };
