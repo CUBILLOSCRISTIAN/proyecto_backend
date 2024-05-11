@@ -2,7 +2,7 @@ const User = require("../user/user.model");
 const jwt = require("jsonwebtoken");
 const config = require("../../config");
 const { respondWithError, throwCustomError } = require("../../utils/functions");
-const { create } = require("../book/book.model");
+const bcrypt = require("bcryptjs");
 
 async function registerUser(data) {
   const { name, email, password } = data;
@@ -10,16 +10,17 @@ async function registerUser(data) {
   const newUser = new User({
     name,
     email,
-    password: await User.encryptPassword(password),
+    password,
   });
 
-  const savedUser = await newUser.save();
+  await newUser.save();
 
-  const token = jwt.sign({ id: savedUser._id }, config.SECRET, {
-    expiresIn: 86400, //24 horas
-  });
+  return { message: "User created successfully" };
+}
 
-  return { token };
+async function encryptPassword(password) {
+  const salt = await bcrypt.genSalt(10);
+  return await bcrypt.hash(password, salt);
 }
 
 async function loginUser(data) {
@@ -62,4 +63,4 @@ async function verifyToken(req, res, next) {
   }
 }
 
-module.exports = { registerUser, loginUser, verifyToken };
+module.exports = { registerUser, loginUser, verifyToken, encryptPassword };
