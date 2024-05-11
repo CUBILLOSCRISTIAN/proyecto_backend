@@ -52,10 +52,13 @@ async function verificarFiltros(filtros, order) {
 
   // Verificar que los filtros solo contengan campos válidos
   const camposFiltros = Object.keys(filtros);
+
   const filtrosValidos = camposFiltros.every((filtro) =>
     camposValidos.includes(filtro)
   );
+
   const estadosValidos = ["en progreso", "completado", "cancelado"];
+
   // Verificar el estado de la orden si se proporciona el filtro de estado
   if (filtros.estado && !estadosValidos.includes(filtros.estado)) {
     throw new Error("El filtro de estado contiene un valor no válido");
