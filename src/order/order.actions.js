@@ -1,6 +1,7 @@
 const Order = require("./order.model");
 const Book = require("../book/book.model");
 const { changeStatusBookMongo } = require("../book/book.actions");
+const User = require("../user/user.model");
 
 async function createOrderMongo(data) {
   const newOrder = await Order.create(data);
@@ -84,7 +85,7 @@ async function verificarFiltros(filtros, order) {
 }
 
 async function verifyUser(order, userId) {
-  return !order.comprador.equals(userId) && !order.vendedor.equals(userId);
+  return order.comprador.equals(userId) || order.vendedor.equals(userId);
 }
 
 async function updateOrderCompradorMongo(order, estado) {
@@ -108,7 +109,6 @@ async function updateOrderVendedorMongo(order, estado) {
   await order.save();
   return order;
 }
-
 
 module.exports = {
   createOrderMongo,
