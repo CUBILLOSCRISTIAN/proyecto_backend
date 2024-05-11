@@ -1,27 +1,10 @@
 const Order = require("./order.model");
-const Book = require("../book/book.model");
-const { changeStatusBookMongo } = require("../book/book.actions");
-const User = require("../user/user.model");
+const bookActions = require("../book/book.actions");
+const userActions = require("../user/user.actions");
 
 async function createOrderMongo(data) {
   const newOrder = await Order.create(data);
   return newOrder;
-}
-
-async function verifyOnlySalesman(books_ids) {
-  const books = await Book.find({ _id: { $in: books_ids } });
-  const firstSalesman = books[0].dueño;
-  return books.every((book) => book.dueño.equals(firstSalesman));
-}
-
-async function getBooksTotalPrice(books_ids) {
-  const books = await Book.find({ _id: { $in: books_ids } });
-  return books.reduce((acc, book) => acc + book.precio, 0);
-}
-
-async function getSalesman(books_ids) {
-  const books = await Book.find({ _id: { $in: books_ids } });
-  return books[0].dueño;
 }
 
 async function getOrderMongo(idOrder) {
@@ -29,16 +12,8 @@ async function getOrderMongo(idOrder) {
   return order;
 }
 
-async function putOrderInUser(userId, orderId, type) {
-  const user = await User.findById(userId);
-  type === 0
-    ? user.books_purchased.push(orderId)
-    : user.books_sold.push(orderId);
-  await user.save();
-}
-
 async function getOrdersMongo(userId, filtros) {
-  const user = await User.findById(userId);
+  const user = await userActions.GetUserByIdMongo(userId);
   const orders = await user.books_purchased.map((orderId) => {
     const order = awaitOrder.findById(orderId);
     // Verificar si la orden cumple con los filtros
@@ -92,9 +67,8 @@ async function updateOrderCompradorMongo(order, estado) {
   if (estado !== "cancelar") {
     return throwCustomError(400, "El estado proporcionado no es válido.");
   }
+  await bookActions.returnStatusBooksMongo(order.libros_ids);
   order.estado = estado;
-  const books = await Book.find({ _id: { $in: order.libros_ids } });
-  books.every((book) => changeStatusBookMongo(book));
   await order.save();
   return order;
 }
@@ -103,20 +77,18 @@ async function updateOrderVendedorMongo(order, estado) {
   if (estado !== "cancelar" && estado !== "completar") {
     return throwCustomError(400, "El estado proporcionado no es válido.");
   }
+  if (estado === "cancelar") {
+    // Cambiar el estado de los libros si se cancela la orden
+    await bookActions.returnStatusBooksMongo(order.libros_ids);
+  }
   order.estado = estado;
-  const books = await Book.find({ _id: { $in: order.libros_ids } });
-  books.every((book) => changeStatusBookMongo(book));
   await order.save();
   return order;
 }
 
 module.exports = {
   createOrderMongo,
-  verifyOnlySalesman,
-  getBooksTotalPrice,
-  getSalesman,
   getOrderMongo,
-  putOrderInUser,
   getOrdersMongo,
   verifyUser,
   updateOrderCompradorMongo,
