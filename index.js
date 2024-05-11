@@ -21,7 +21,7 @@ const routesUser = require("./src/user/user.route");
 app.use("/users", routesUser);
 
 const routesOrder = require("./src/order/order.route");
-app.use("/order", routesOrder);
+app.use("/orders", routesOrder);
 
 //MORE ROOUTES
 

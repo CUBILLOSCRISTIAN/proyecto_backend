@@ -2,7 +2,7 @@ const userActions = require("./user.actions");
 const auth = require("../auth/auth.actions");
 
 async function GetUserById(id) {
-  const user = await userActions.GetUserByIdMongo(id);
+  const user = await userActions.getUserByIdMongo(id);
   return user;
 }
 

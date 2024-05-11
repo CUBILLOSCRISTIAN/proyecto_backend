@@ -13,14 +13,25 @@ async function getOrderMongo(idOrder) {
 }
 
 async function getOrdersMongo(userId, filtros) {
-  const user = await userActions.GetUserByIdMongo(userId);
-  const orders = await user.books_purchased.map((orderId) => {
-    const order = awaitOrder.findById(orderId);
-    // Verificar si la orden cumple con los filtros
-    const cumpleFiltros = verificarFiltros(filtros || {}, order);
-    return cumpleFiltros ? order : null;
-  });
-  return orders;
+  const user = await userActions.getUserByIdMongo(userId);
+  if (Object.keys(filtros).length === 0) {
+    const ordersPromises = user.books_purchased.map(async (orderId) => {
+      const order = await Order.findById(orderId);
+      return order;
+    });
+
+    const orders = await Promise.all(ordersPromises);
+    console.log("orders", orders);
+    return orders;
+  } else {
+    const orders = await user.books_purchased.map(async (orderId) => {
+      const order = await Order.findById(orderId);
+      // Verificar si la orden cumple con los filtros
+      const cumpleFiltros = await verificarFiltros(filtros || {}, order);
+      return cumpleFiltros ? order : null;
+    });
+    return orders;
+  }
 }
 
 async function verificarFiltros(filtros, order) {
