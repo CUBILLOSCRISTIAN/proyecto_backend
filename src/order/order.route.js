@@ -53,6 +53,6 @@ async function UpdateOrder(req, res) {
 router.post("/", verifyToken, PostOrder); //Crear una orden
 router.get("/:id", verifyToken, GetOrder); //Obtener una orden
 router.get("/", verifyToken, GetOrders); //Obtener todas las ordenes
-router.patch("/:id", verifyToken, UpdateOrder); //Actualizar una orden
+router.patch("/update/:id", verifyToken, UpdateOrder); //Actualizar una orden
 
 module.exports = router;

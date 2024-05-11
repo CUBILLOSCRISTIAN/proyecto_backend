@@ -45,11 +45,16 @@ async function verifyOnlySalesman(books_ids) {
 async function getBooksTotalPrice(books_ids) {
   const books = await Book.find({ _id: { $in: books_ids } });
   return books.reduce((acc, book) => acc + book.precio, 0);
+}
 
-  async function getSalesman(books_ids) {
-    const books = await Book.find({ _id: { $in: books_ids } });
-    return books[0].dueño;
-  }
+async function getSalesman(books_ids) {
+  const books = await Book.find({ _id: { $in: books_ids } });
+  return books[0].dueño;
+}
+async function updateBookMongo(book_id, data) {
+  const updatedBook = await Book.findByIdAndUpdate(book_id, data);
+  await updatedBook.save();
+  return updatedBook;
 }
 
 module.exports = {
@@ -62,4 +67,5 @@ module.exports = {
   verifyOnlySalesman,
   getBooksTotalPrice,
   getSalesman,
+  updateBookMongo,
 };
