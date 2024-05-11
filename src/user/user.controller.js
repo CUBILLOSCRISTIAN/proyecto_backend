@@ -1,8 +1,8 @@
-const { GetUserByIdMongo, userUpdateMongo } = require("./user.actions");
+const userActions = require("./user.actions");
 const auth = require("../auth/auth.actions");
 
 async function GetUserById(id) {
-  const user = await GetUserByIdMongo(id);
+  const user = await userActions.GetUserByIdMongo(id);
   return user;
 }
 
@@ -11,8 +11,8 @@ async function updateUser(id, data) {
   if (password) {
     data.password = await auth.encryptPassword(password);
   }
-  const userUpdated = await userUpdateMongo(id, data);
-  
+  const userUpdated = await userActions.userUpdateMongo(id, data);
+
   const updatedUserInfo = {
     id: userUpdated.id,
     email: userUpdated.email,
@@ -22,4 +22,8 @@ async function updateUser(id, data) {
   return updatedUserInfo;
 }
 
-module.exports = { GetUserById, updateUser };
+async function deleteUser(id) {
+  await userActions.deleteUserMongo(id);
+}
+
+module.exports = { GetUserById, updateUser, deleteUser };

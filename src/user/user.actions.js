@@ -10,4 +10,9 @@ async function userUpdateMongo(id, data) {
   return userUpdated;
 }
 
-module.exports = { GetUserByIdMongo, userUpdateMongo };
+async function deleteUserMongo(id) {
+  const filter = { deleted: true };
+  await User.findByIdAndUpdate(id, filter);
+}
+
+module.exports = { GetUserByIdMongo, userUpdateMongo, deleteUserMongo };
