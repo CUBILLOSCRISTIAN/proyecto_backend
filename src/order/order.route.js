@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { createOrder, getOrder } = require("./order.controller");
+const { createOrder, getOrder, getOrders } = require("./order.controller");
 
 const { respondWithError, throwCustomError } = require("../../utils/functions");
 
@@ -26,7 +26,18 @@ async function GetOrder(req, res) {
   }
 }
 
+async function GetOrders(req, res) {
+  try {
+    const orders = await getOrders(req.userId, req.query);
+    res.status(200).json(orders);
+  } catch (e) {
+    respondWithError(res, e);
+  }
+}
+
 //Obtener una orden
 router.post("/", verifyToken, PostOrder); //Crear una orden
 router.get("/:id", verifyToken, GetOrder); //Obtener una orden
+router.get("/", verifyToken, GetOrders); //Obtener todas las ordenes
+
 module.exports = router;
