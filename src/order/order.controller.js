@@ -1,22 +1,12 @@
 const { respondWithError, throwCustomError } = require("../../utils/functions");
-
-const {
-  createOrderMongo,
-  verifyOnlySalesman,
-  getBooksTotalPrice,
-  getSalesman,
-  getOrderMongo,
-  getOrdersMongo,
-  putOrderInUser,
-  verifyUser,
-  updateOrderVendedorMongo,
-  updateOrderCompradorMongo,
-} = require("./order.actions");
+const bookActions = require("../book/book.actions");
+const userActions = require("../user/user.actions");
+const orderActions = require("./order.actions");
 
 async function createOrder(data) {
   const { libros_ids } = data;
 
-  const verifySalesman = await verifyOnlySalesman(libros_ids);
+  const verifySalesman = await bookActions.verifyOnlySalesman(libros_ids);
 
   if (!verifySalesman)
     return throwCustomError(
@@ -24,27 +14,28 @@ async function createOrder(data) {
       "Solo puedes comprar libros de un mismo vendedor."
     );
 
-  data.vendedor = await getSalesman(libros_ids);
+  data.vendedor = await bookActions.getSalesman(libros_ids);
 
-  if (data.vendedor == data.comprador)
+  if (data.vendedor === data.comprador)
     return throwCustomError(400, "No puedes comprarte a ti mismo.");
 
-  data.total = await getBooksTotalPrice(libros_ids);
+  data.total = await bookActions.getBooksTotalPrice(libros_ids);
 
-  const createdOrder = await createOrderMongo(data);
-  await putOrderInUser(data.comprador, createdOrder._id, 0); // 0 para comprador
-  await putOrderInUser(data.vendedor, createdOrder._id, 1); // 1 para vendedor
+  const createdOrder = await orderActions.createOrderMongo(data);
+  await bookActions.changeStatusBooksMongo(libros_ids);
+  await userActions.putOrderInUser(data.comprador, createdOrder._id, 0); // 0 para comprador
+  await userActions.putOrderInUser(data.vendedor, createdOrder._id, 1); // 1 para vendedor
   return createdOrder;
 }
 
 async function getOrder(idOrder, userId) {
-  const order = await getOrderMongo(idOrder);
+  const order = await orderActions.getOrderMongo(idOrder);
 
   if (!order) {
     return throwCustomError(404, "El pedido no existe. jeje");
   }
 
-  const verify = await verifyUser(order, userId);
+  const verify = await orderActions.verifyUser(order, userId);
   if (!verify) {
     return throwCustomError(
       403,
@@ -55,19 +46,19 @@ async function getOrder(idOrder, userId) {
 }
 
 async function getOrders(userId, filters) {
-  const orders = await getOrdersMongo(userId, filters);
+  const orders = await orderActions.getOrdersMongo(userId, filters);
   return orders;
 }
 
 async function updateOrder(idOrder, userId, data) {
   const { estado } = data;
-  const order = await getOrderMongo(idOrder);
+  const order = await orderActions.getOrderMongo(idOrder);
 
   if (!order) {
     return throwCustomError(404, "El pedido no existe.");
   }
 
-  const verify = await verifyUser(order, userId);
+  const verify = await orderActions.verifyUser(order, userId);
 
   if (!verify) {
     return throwCustomError(
@@ -85,8 +76,8 @@ async function updateOrder(idOrder, userId, data) {
     }
 
     return order.comprador === userId
-      ? await updateOrderCompradorMongo(order, estado)
-      : await updateOrderVendedorMongo(order, estado);
+      ? await orderActions.updateOrderCompradorMongo(order, estado)
+      : await orderActions.updateOrderVendedorMongo(order, estado);
   }
 }
 module.exports = {
