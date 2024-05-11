@@ -1,3 +1,4 @@
+const { use } = require("../order/order.route");
 const User = require("./user.model");
 
 async function GetUserByIdMongo(id) {
@@ -12,7 +13,20 @@ async function userUpdateMongo(id, data) {
 
 async function deleteUserMongo(id) {
   const filter = { deleted: true };
-  await User.findByIdAndUpdate(id, filter);
+  await userUpdateMongo(id, filter);
 }
 
-module.exports = { GetUserByIdMongo, userUpdateMongo, deleteUserMongo };
+async function putOrderInUser(userId, orderId, type) {
+  const user = await GetUserByIdMongo(userId);
+  type === 0
+    ? user.books_purchased.push(orderId)
+    : user.books_sold.push(orderId);
+  await user.save();
+}
+
+module.exports = {
+  GetUserByIdMongo,
+  userUpdateMongo,
+  deleteUserMongo,
+  putOrderInUser,
+};
